@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\API\ProductController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +16,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('register', [RegisterController::class, 'register']);
+Route::post('login', [RegisterController::class, 'login']);
+
+Route::middleware('auth:api')->group(function() {
+    // Logout Apis
+    Route::get('logout', [RegisterController::class, 'currentDeviceLogout']);
+    Route::get('all-devices-logout', [RegisterController::class, 'allDevicesLogout']);
+    Route::get('all-devices-except-current-devices-logout', [RegisterController::class, 'allDevicesExceptCurrentDeviceLogout']);
+    
+    // Products Apis
+    Route::resource('products', ProductController::class);
 });
+/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});*/
